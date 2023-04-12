@@ -25,9 +25,11 @@ target_link_libraries(${TARGETNAME_INCLUDES_ENGINE} INTERFACE
 	${TARGETNAME_INCLUDES_FILESYSTEM}
 )
 
+add_subdirectory(thirdparty)
 add_subdirectory(public)
 add_subdirectory(filesystem)
 add_subdirectory(engine)
+add_subdirectory(game_launch)
 
 if(NOT NF_DEDICATED_SERVER)
 	add_subdirectory(ref)

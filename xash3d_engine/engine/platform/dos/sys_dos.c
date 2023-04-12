@@ -17,7 +17,9 @@ GNU General Public License for more details.
 #include <dos.h>
 void Platform_GetClipboardText( char *buffer, size_t size )
 {
-
+	// stub
+	if( buffer && size ) buffer[0] = 0;
+	return 0;
 }
 
 void Platform_SetClipboardText( const char *buffer )

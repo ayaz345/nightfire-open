@@ -1,0 +1,23 @@
+add_executable(${TARGETNAME_EXE_GAME_LAUNCHER}
+	game.cpp
+	$<$<BOOL:${WIN32}>:game.rc>
+)
+
+target_compile_definitions(${TARGETNAME_EXE_GAME_LAUNCHER} PRIVATE
+	XASH_DISABLE_MENU_CHANGEGAME=0 # NFTODO: Predicate on DISABLE_MENU_CHANGEGAME build option
+)
+
+target_link_libraries(${TARGETNAME_EXE_GAME_LAUNCHER} PRIVATE
+	${TARGETNAME_LIB_ENGINE}
+)
+
+if(WIN32)
+	target_link_libraries(${TARGETNAME_EXE_GAME_LAUNCHER} PRIVATE
+		USER32
+		SHELL32
+	)
+else()
+	target_link_libraries(${TARGETNAME_EXE_GAME_LAUNCHER} PRIVATE
+		dl
+	)
+endif()

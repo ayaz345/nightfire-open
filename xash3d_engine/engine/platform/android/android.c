@@ -779,7 +779,7 @@ void Platform_ShellExecute( const char *path, const char *parms )
 int Platform_GetClipboardText( char *buffer, size_t size )
 {
 	// stub
-	if( size ) buffer[0] = 0;
+	if( buffer && size ) buffer[0] = 0;
 	return 0;
 }
 

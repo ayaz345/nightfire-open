@@ -622,7 +622,7 @@ void Host_InitDecals( void )
 		Mem_Free( t );
 	}
 
-	Con_Reportf( "InitDecals: %u decals (%u from WAD, %u from filesystem)\n", numOldDecals + numNewDecals, numOldDecals, numNewDecals );
+	Con_Reportf( "InitDecals: %zu decals (%zu from WAD, %zu from filesystem)\n", numOldDecals + numNewDecals, numOldDecals, numNewDecals );
 }
 
 /*

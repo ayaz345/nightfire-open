@@ -268,9 +268,11 @@ qboolean SW_CreateBuffer( int width, int height, uint *stride, uint *bpp, uint *
 }
 
 // unrelated stubs
-void Platform_GetClipboardText( char *buffer, size_t size )
+int Platform_GetClipboardText( char *buffer, size_t size )
 {
-
+	// stub
+	if( buffer && size ) buffer[0] = 0;
+	return 0;
 }
 
 void Platform_SetClipboardText( const char *buffer )

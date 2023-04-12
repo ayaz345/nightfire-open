@@ -1,14 +1,23 @@
 # NFTODO: This is currently set up using the following assumptions
 # while we don't have all the options migrated yet:
 # - Shared library (no SINGLE_BINARY)
-# - Basic build (dedicated only)
 # - C linkage (no is_cxx_link)
 # - No ENGINE_TESTS
 # - Only Windows or Linux supported
 # - No XASH_CUSTOM_SWAP
-# - Built as dedicated server (no client files, no SDL2)
 # - No FBDEV_SW
 
+if(NF_DEDICATED_SERVER)
+	set(CLIENT_SUPPORT NO)
+else()
+	set(CLIENT_SUPPORT YES)
+endif()
+
+if(CLIENT_SUPPORT)
+	find_package(SDL2 REQUIRED)
+endif()
+
+# NFTODO: Generator expressions
 set(ENGINE_SOURCES
 	common/imagelib/imagelib.h
 	common/imagelib/img_bmp.h
@@ -53,6 +62,65 @@ set(ENGINE_SOURCES
 	common/soundlib/soundlib.h
 	common/bsp/generic/viscompress.h
 	common/bsp/generic/viscompress.c
+	common/base_cmd.h
+	common/base_cmd.c
+	common/cfgscript.c
+	common/cmd.c
+	common/common.h
+	common/common.c
+	common/com_strings.h
+	common/con_utils.c
+	common/crashhandler.c
+	common/custom.c
+	common/cvar.h
+	common/cvar.c
+	common/dedicated.c
+	common/filesystem_engine.c
+	common/gamma.c
+	common/host.c
+	common/host_state.c
+	common/hpak.h
+	common/hpak.c
+	common/identification.c
+	common/infostring.c
+	common/ipv6text.h
+	common/ipv6text.c
+	common/launcher.c
+	common/lib_common.c
+	common/library.h
+	common/masterlist.c
+	common/mod_bmodel.c
+	common/model.c
+	common/model_dump.h
+	common/model_dump.c
+	common/mod_local.h
+	common/mod_sprite.c
+	common/mod_studio.c
+	common/net_buffer.h
+	common/net_buffer.c
+	common/net_chan.c
+	common/netchan.h
+	common/net_encode.h
+	common/net_encode.c
+	common/net_ws.h
+	common/net_ws.c
+	common/pm_debug.c
+	common/pm_local.h
+	common/pm_surface.c
+	common/pm_trace.c
+	common/protocol.h
+	common/sequence.c
+	common/sys_con.c
+	common/system.c
+	common/system.h
+	common/tests.h
+	common/textureproperties.h
+	common/textureproperties.c
+	common/whereami.h
+	common/whereami.c
+	common/world.h
+	common/world.c
+	common/zone.c
 	server/server.h
 	server/sv_client.c
 	server/sv_cmds.c
@@ -70,13 +138,67 @@ set(ENGINE_SOURCES
 	server/sv_world.c
 )
 
-# NFTODO: Client-related files for non-dedicated server builds.
-# Eg:
-# source += bld.path.ant_glob([
-# 	'client/*.c',
-# 	'client/vgui/*.c',
-# 	'client/avi/*.c'])
-# libs += ['opus']
+if(CLIENT_SUPPORT)
+	list(APPEND ENGINE_SOURCES
+		client/avi/avi_stub.c
+		client/avi/avi_win.c
+		client/avi/avi.h
+		client/vgui/vgui_draw.h
+		client/vgui/vgui_draw.c
+		client/cl_cmds.c
+		client/cl_custom.c
+		client/cl_debug.c
+		client/cl_demo.c
+		client/cl_efrag.c
+		client/cl_efx.c
+		client/cl_events.c
+		client/cl_font.c
+		client/cl_frame.c
+		client/cl_game.c
+		client/cl_gameui.c
+		client/client.h
+		client/cl_main.c
+		client/cl_mobile.c
+		client/cl_netgraph.c
+		client/cl_parse.c
+		client/cl_pmove.c
+		client/cl_qparse.c
+		client/cl_remap.c
+		client/cl_render.c
+		client/cl_scrn.c
+		client/cl_securedstub.c
+		client/cl_surfaceprop_effects.h
+		client/cl_surfaceprop_effects.c
+		client/cl_tent.h
+		client/cl_tent.c
+		client/cl_video.c
+		client/cl_view.c
+		client/console.c
+		client/in_joy.c
+		client/input.h
+		client/input.c
+		client/in_touch.c
+		client/keys.c
+		client/mod_dbghulls.c
+		client/ref_common.h
+		client/ref_common.c
+		client/s_dsp.c
+		client/s_load.c
+		client/s_main.c
+		client/s_mix.c
+		client/s_mouth.c
+		client/sound.h
+		client/s_stream.c
+		client/s_utils.c
+		client/s_vox.c
+		client/titles.c
+		client/vid_common.h
+		client/vid_common.c
+		client/voice.h
+		client/voice.c
+		client/vox.h
+	)
+endif()
 
 if(WIN32)
 	list(APPEND ENGINE_SOURCES
@@ -99,38 +221,52 @@ else()
 	)
 endif()
 
-add_library(${TARGETNAME_XASH3D_ENGINE}
+if(SDL2_FOUND)
+	list(APPEND ENGINE_SOURCES
+		platform/sdl/events.h
+		platform/sdl/events.c
+		platform/sdl/in_sdl.c
+		platform/sdl/s_sdl.c
+		platform/sdl/sys_sdl.c
+		platform/sdl/vid_sdl.c
+	)
+endif()
+
+add_library(${TARGETNAME_LIB_ENGINE}
 	${ENGINE_SOURCES}
 )
 
-target_link_libraries(${TARGETNAME_XASH3D_ENGINE} PUBLIC
+target_link_libraries(${TARGETNAME_LIB_ENGINE} PUBLIC
 	${TARGETNAME_INCLUDES_ENGINE}
 	${TARGETNAME_LIB_FILESYSTEM_STDIO}
 )
 
-target_link_libraries(${TARGETNAME_XASH3D_ENGINE} PRIVATE
+target_link_libraries(${TARGETNAME_LIB_ENGINE} PRIVATE
+	$<$<BOOL:${SDL2_FOUND}>:SDL2::SDL2>
+	$<$<BOOL:${CLIENT_SUPPORT}>:Opus::opus>
 	${TARGETNAME_LIB_PUBLIC}
 )
 
-target_compile_definitions(${TARGETNAME_XASH3D_ENGINE} PRIVATE
+target_compile_definitions(${TARGETNAME_LIB_ENGINE} PRIVATE
 	XASH_DEDICATED=$<BOOL:${NF_DEDICATED_SERVER}>
-	XASH_ENGINE_TESTS=0 # NFTODO: Predicate on tests build option
-	XASH_STATIC_LIBS=0 # NFTODO: Predicate on static libs build option
-	XASH_CUSTOM_SWAP=0 # Don't need to support this
-	SINGLE_BINARY=0 # NFTODO: Predicate on single binary build option
-	XASH_NO_ASYNC_NS_RESOLVE=0 # Don't need to support this
-	XASH_USE_SELECT=$<OR:$<BOOL:${NF_DEDICATED_SERVER}>,0> # NFTODO: Include USE_SELECT build option here
+	#XASH_ENGINE_TESTS=0 # NFTODO: Predicate on tests build option
+	#XASH_STATIC_LIBS=0 # NFTODO: Predicate on static libs build option
+	#XASH_CUSTOM_SWAP=0 # Don't need to support this
+	#SINGLE_BINARY=0 # NFTODO: Predicate on single binary build option
+	#XASH_NO_ASYNC_NS_RESOLVE=0 # Don't need to support this
+	$<$<OR:$<BOOL:${NF_DEDICATED_SERVER}>,0>:XASH_USE_SELECT=1> # NFTODO: Include USE_SELECT build option here
 	SUPPORT_BSP2_FORMAT=0 # Don't need to support this
 	XASH_64BIT=1 # NFTODO: Predicate this on 32-bit vs 64-bit build option
 	AFTERBURNER_ENGINE=1 # NFTODO: Rename this to NIGHTFIRE_OPEN_ENGINE
 	DBGHELP=$<BOOL:${WIN32}>
 	PSAPI_VERSION=$<BOOL:${WIN32}>
+	$<$<BOOL:${SDL2_FOUND}>:XASH_SDL=2>
 )
 
 # NFTODO: Renderers must register their defines here!
 
 if(WIN32)
-	target_link_libraries(${TARGETNAME_XASH3D_ENGINE} PRIVATE
+	target_link_libraries(${TARGETNAME_LIB_ENGINE} PRIVATE
 		USER32
 		SHELL32
 		GDI32
@@ -140,7 +276,7 @@ if(WIN32)
 		WS2_32
 	)
 else()
-	target_link_libraries(${TARGETNAME_XASH3D_ENGINE} PRIVATE
+	target_link_libraries(${TARGETNAME_LIB_ENGINE} PRIVATE
 		m
 		rt
 		pthread
@@ -152,12 +288,15 @@ else()
 endif()
 
 if(NOT WIN32 AND BUILD_SHARED_LIBS)
-	target_compile_options(${TARGETNAME_XASH3D_ENGINE} PRIVATE
+	target_compile_options(${TARGETNAME_LIB_ENGINE} PRIVATE
 		"-fPIC"
+	)
+	target_link_options(${TARGETNAME_LIB_ENGINE} PRIVATE
+		"-Wl,--no-undefined"
 	)
 endif()
 
-target_include_directories(${TARGETNAME_XASH3D_ENGINE} PRIVATE
+target_include_directories(${TARGETNAME_LIB_ENGINE} PRIVATE
 	client
 	client/vgui
 	server

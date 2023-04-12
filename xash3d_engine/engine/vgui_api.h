@@ -183,7 +183,7 @@ typedef struct  vguiapi_s
 	void	(*EnableTextInput)( qboolean enable, qboolean force );
 	void	(*GetCursorPos)( int *x, int *y );
 	int		(*ProcessUtfChar)( int ch );
-	int		(*GetClipboardText)( char *buffer, size_t bufferSize );
+	int	(*GetClipboardText)( char *buffer, size_t bufferSize );
 	void	(*SetClipboardText)( const char *text );
 	key_modifier_t (*GetKeyModifiers)( void );
 	// called from engine side

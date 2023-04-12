@@ -95,7 +95,7 @@ void Platform_PreCreateMove( void );
 void Platform_MouseMove( float *x, float *y );
 void Platform_SetCursorType( VGUI_DefaultCursor type );
 // Clipboard
-void Platform_GetClipboardText( char *buffer, size_t size );
+int Platform_GetClipboardText( char *buffer, size_t size );
 void Platform_SetClipboardText( const char *buffer );
 
 #if XASH_SDL == 12
