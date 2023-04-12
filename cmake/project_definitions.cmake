@@ -1,1 +1,2 @@
-set(TARGETNAME_LIB_PUBLIC Lib_Public)
+set(TARGETNAME_LIB_PUBLIC public)
+set(TARGETNAME_LIB_FILESYSTEM_STDIO filesystem_stdio)

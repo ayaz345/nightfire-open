@@ -1,0 +1,6 @@
+* Allow 32-bit and 64-bit builds
+* Establish clang-format file
+* Turn up warnings as high as we feasibly can, and fix any issues
+  * Also add settings to control how pedantic warnings should be, warnings as errors, etc.
+* For each target, separate files into a public header directory and a private src directory
+* Separate and isolate the canonical engine header files
