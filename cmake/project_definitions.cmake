@@ -1,0 +1,1 @@
+set(TARGETNAME_LIB_PUBLIC Lib_Public)
