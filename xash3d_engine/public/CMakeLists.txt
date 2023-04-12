@@ -19,3 +19,9 @@ target_include_directories(${TARGETNAME_LIB_PUBLIC} PUBLIC
 	../pm_shared
 	../engine
 )
+
+if(NOT WIN32 AND BUILD_SHARED_LIBS)
+	target_compile_options(${TARGETNAME_LIB_PUBLIC} PRIVATE
+		"-fPIC"
+	)
+endif()

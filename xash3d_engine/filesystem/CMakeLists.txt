@@ -30,4 +30,10 @@ else()
 	)
 endif()
 
-# TODO: Enable tests
+if(NOT WIN32 AND BUILD_SHARED_LIBS)
+	target_compile_options(${TARGETNAME_LIB_FILESYSTEM_STDIO} PRIVATE
+		"-fPIC"
+	)
+endif()
+
+# NFTODO: Enable tests
