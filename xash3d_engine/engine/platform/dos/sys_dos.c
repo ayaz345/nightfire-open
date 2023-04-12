@@ -20,7 +20,7 @@ void Platform_GetClipboardText( char *buffer, size_t size )
 
 }
 
-void Platform_SetClipboardText( const char *buffer, size_t size )
+void Platform_SetClipboardText( const char *buffer )
 {
 
 }

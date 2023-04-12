@@ -70,6 +70,14 @@ set(ENGINE_SOURCES
 	server/sv_world.c
 )
 
+# NFTODO: Client-related files for non-dedicated server builds.
+# Eg:
+# source += bld.path.ant_glob([
+# 	'client/*.c',
+# 	'client/vgui/*.c',
+# 	'client/avi/*.c'])
+# libs += ['opus']
+
 if(WIN32)
 	list(APPEND ENGINE_SOURCES
 		platform/win32/con_win.c
@@ -96,6 +104,7 @@ add_library(${TARGETNAME_XASH3D_ENGINE}
 )
 
 target_link_libraries(${TARGETNAME_XASH3D_ENGINE} PUBLIC
+	${TARGETNAME_INCLUDES_ENGINE}
 	${TARGETNAME_LIB_FILESYSTEM_STDIO}
 )
 
@@ -104,16 +113,18 @@ target_link_libraries(${TARGETNAME_XASH3D_ENGINE} PRIVATE
 )
 
 target_compile_definitions(${TARGETNAME_XASH3D_ENGINE} PRIVATE
-	XASH_DEDICATED=1 # NFTODO: Predicate on dedicated build option
+	XASH_DEDICATED=$<BOOL:${NF_DEDICATED_SERVER}>
 	XASH_ENGINE_TESTS=0 # NFTODO: Predicate on tests build option
 	XASH_STATIC_LIBS=0 # NFTODO: Predicate on static libs build option
 	XASH_CUSTOM_SWAP=0 # Don't need to support this
 	SINGLE_BINARY=0 # NFTODO: Predicate on single binary build option
 	XASH_NO_ASYNC_NS_RESOLVE=0 # Don't need to support this
-	XASH_USE_SELECT=1 # NFTODO: Predicate on (dedicated || USE_SELECT) build options
+	XASH_USE_SELECT=$<OR:$<BOOL:${NF_DEDICATED_SERVER}>,0> # NFTODO: Include USE_SELECT build option here
 	SUPPORT_BSP2_FORMAT=0 # Don't need to support this
 	XASH_64BIT=1 # NFTODO: Predicate this on 32-bit vs 64-bit build option
 	AFTERBURNER_ENGINE=1 # NFTODO: Rename this to NIGHTFIRE_OPEN_ENGINE
+	DBGHELP=$<BOOL:${WIN32}>
+	PSAPI_VERSION=$<BOOL:${WIN32}>
 )
 
 # NFTODO: Renderers must register their defines here!
@@ -128,12 +139,6 @@ if(WIN32)
 		PSAPI
 		WS2_32
 	)
-
-	# NFTODO: Generator expressions would de-duplicate this config
-	target_compile_definitions(${TARGETNAME_XASH3D_ENGINE} PRIVATE
-		DBGHELP=1
-		PSAPI_VERSION=1
-	)
 else()
 	target_link_libraries(${TARGETNAME_XASH3D_ENGINE} PRIVATE
 		m
@@ -144,12 +149,6 @@ else()
 		# NFTODO: This should be removed if built in static configuration
 		dl
 	)
-
-	# NFTODO: Generator expressions would de-duplicate this config
-	target_compile_definitions(${TARGETNAME_XASH3D_ENGINE} PRIVATE
-		DBGHELP=0
-		PSAPI_VERSION=0
-	)
 endif()
 
 if(NOT WIN32 AND BUILD_SHARED_LIBS)
@@ -157,12 +156,6 @@ if(NOT WIN32 AND BUILD_SHARED_LIBS)
 		"-fPIC"
 	)
 endif()
-
-target_include_directories(${TARGETNAME_XASH3D_ENGINE} PUBLIC
-	.
-	common
-	common/imagelib
-)
 
 target_include_directories(${TARGETNAME_XASH3D_ENGINE} PRIVATE
 	client

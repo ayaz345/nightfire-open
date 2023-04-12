@@ -7,6 +7,7 @@ project(Nightfire-Open LANGUAGES C CXX)
 include(project_definitions)
 
 option(BUILD_SHARED_LIBS "Build using shared libraries" ON)
+option(NF_DEDICATED_SERVER "Build dedicated server (no client-specific code)" OFF)
 
 set(CMAKE_CXX_STANDARD 11)
 set(CMAKE_CXX_STANDARD_REQUIRED YES)

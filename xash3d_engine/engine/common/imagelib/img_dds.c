@@ -122,7 +122,7 @@ void Image_DXTGetPixelFormat( dds_t *hdr, dds_header_dxt10_t *headerExt )
 			}
 		}
 		else
-		{ 
+		{
 			switch( hdr->dsPixelFormat.dwFourCC )
 			{
 			case TYPE_DXT1:
@@ -255,7 +255,7 @@ uint Image_DXTCalcSize( const char *name, dds_t *hdr, size_t filesize )
 
 	if( filesize != buffsize ) // main check
 	{
-		Con_DPrintf( S_WARN "Image_LoadDDS: (%s) probably corrupted (%i should be %u)\n", name, buffsize, (uint32_t)filesize );
+		Con_DPrintf( S_WARN "Image_LoadDDS: (%s) probably corrupted (%zu should be %zu)\n", name, buffsize, filesize );
 		if( buffsize > filesize )
 			return false;
 	}

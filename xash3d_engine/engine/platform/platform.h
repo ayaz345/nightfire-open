@@ -47,9 +47,9 @@ void Android_SaveID( const char *id );
 
 #if XASH_WIN32
 void Platform_UpdateStatusLine( void );
-#else 
+#else
 static inline void Platform_UpdateStatusLine( void ) { }
-#endif  
+#endif
 
 #if XASH_NSWITCH
 void NSwitch_Init( void );
@@ -95,7 +95,7 @@ void Platform_PreCreateMove( void );
 void Platform_MouseMove( float *x, float *y );
 void Platform_SetCursorType( VGUI_DefaultCursor type );
 // Clipboard
-int Platform_GetClipboardText( char *buffer, size_t size );
+void Platform_GetClipboardText( char *buffer, size_t size );
 void Platform_SetClipboardText( const char *buffer );
 
 #if XASH_SDL == 12
