@@ -434,9 +434,8 @@ void Sys_Error( const char *error, ... )
 	Q_vsnprintf( text, MAX_PRINT_MSG, error, argptr );
 	va_end( argptr );
 
-	Sys_DebugBreak();
-
 	SV_SysError( text );
+	Sys_DebugBreak();
 
 	if( !Host_IsDedicated() )
 	{

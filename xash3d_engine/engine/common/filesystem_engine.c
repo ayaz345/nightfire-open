@@ -59,7 +59,7 @@ static void FS_UnloadProgs( void )
 #ifdef XASH_INTERNAL_GAMELIBS
 #define FILESYSTEM_STDIO_DLL "filesystem_stdio"
 #else
-#define FILESYSTEM_STDIO_DLL "filesystem_stdio." OS_LIB_EXT
+#define FILESYSTEM_STDIO_DLL OS_LIB_PREFIX "filesystem_stdio." OS_LIB_EXT
 #endif
 
 qboolean FS_LoadProgs( void )
@@ -147,7 +147,3 @@ void FS_Shutdown( void )
 
 	FS_UnloadProgs();
 }
-
-
-
-

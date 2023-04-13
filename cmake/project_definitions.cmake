@@ -1,3 +1,5 @@
+set(INSTALL_ROOT nightfire-open)
+
 set(TARGETNAME_INCLUDES_SDK sdk_includes)
 set(TARGETNAME_INCLUDES_FILESYSTEM filesystem_includes)
 set(TARGETNAME_INCLUDES_ENGINE engine_includes)
