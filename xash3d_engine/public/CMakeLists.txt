@@ -1,3 +1,5 @@
+include(compiler_settings)
+
 add_library(${TARGETNAME_LIB_PUBLIC} STATIC
 	build.h
 	build.c
@@ -17,8 +19,4 @@ target_link_libraries(${TARGETNAME_LIB_PUBLIC} PUBLIC
 	${TARGETNAME_INCLUDES_SDK}
 )
 
-if(NOT WIN32 AND BUILD_SHARED_LIBS)
-	target_compile_options(${TARGETNAME_LIB_PUBLIC} PRIVATE
-		"-fPIC"
-	)
-endif()
+set_common_library_compiler_settings(${TARGETNAME_LIB_PUBLIC})

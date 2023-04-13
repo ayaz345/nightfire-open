@@ -1,3 +1,5 @@
+include(compiler_settings)
+
 add_library(${TARGETNAME_LIB_REF_SOFT} SHARED
 	adivtab.h
 	r_aclip.c
@@ -29,6 +31,8 @@ add_library(${TARGETNAME_LIB_REF_SOFT} SHARED
 target_compile_definitions(${TARGETNAME_LIB_REF_SOFT} PRIVATE
 	REF_DLL
 )
+
+set_common_library_compiler_settings(${TARGETNAME_LIB_REF_SOFT})
 
 target_include_directories(${TARGETNAME_LIB_REF_SOFT} PUBLIC
 	.

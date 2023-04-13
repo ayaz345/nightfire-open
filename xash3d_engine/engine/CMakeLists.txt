@@ -7,6 +7,8 @@
 # - No XASH_CUSTOM_SWAP
 # - No FBDEV_SW
 
+include(compiler_settings)
+
 if(NF_DEDICATED_SERVER)
 	set(CLIENT_SUPPORT NO)
 else()
@@ -287,14 +289,7 @@ else()
 	)
 endif()
 
-if(NOT WIN32 AND BUILD_SHARED_LIBS)
-	target_compile_options(${TARGETNAME_LIB_ENGINE} PRIVATE
-		"-fPIC"
-	)
-	target_link_options(${TARGETNAME_LIB_ENGINE} PRIVATE
-		"-Wl,--no-undefined"
-	)
-endif()
+set_common_library_compiler_settings(${TARGETNAME_LIB_ENGINE})
 
 target_include_directories(${TARGETNAME_LIB_ENGINE} PRIVATE
 	client

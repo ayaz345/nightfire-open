@@ -1,3 +1,5 @@
+include(compiler_settings)
+
 add_library(${TARGETNAME_LIB_FILESYSTEM_STDIO} SHARED
 	dir.c
 	filesystem_internal.h
@@ -16,6 +18,8 @@ target_link_libraries(${TARGETNAME_LIB_FILESYSTEM_STDIO} PUBLIC
 	${TARGETNAME_LIB_PUBLIC}
 )
 
+set_common_library_compiler_settings(${TARGETNAME_LIB_PUBLIC})
+
 if(WIN32)
 	target_compile_options(${TARGETNAME_LIB_FILESYSTEM_STDIO} PRIVATE
 		"/GR-"
@@ -24,12 +28,6 @@ else()
 	target_compile_options(${TARGETNAME_LIB_FILESYSTEM_STDIO} PRIVATE
 		"-fno-rtti"
 		"-fno-exceptions"
-	)
-endif()
-
-if(NOT WIN32 AND BUILD_SHARED_LIBS)
-	target_compile_options(${TARGETNAME_LIB_FILESYSTEM_STDIO} PRIVATE
-		"-fPIC"
 	)
 endif()
 
