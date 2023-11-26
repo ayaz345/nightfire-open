@@ -37,11 +37,7 @@ def imageToBytes(imageFile : Image):
 		rawData[outIndex + 1] = pixel[1]
 		rawData[outIndex + 2] = pixel[2]
 
-		if numChannels == 4:
-			rawData[outIndex + 3] = pixel[3]
-		else:
-			rawData[outIndex + 3] = 255
-
+		rawData[outIndex + 3] = pixel[3] if numChannels == 4 else 255
 	return bytes(rawData)
 
 def createSingleFrameSprite(imageFile : Image):

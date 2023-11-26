@@ -35,7 +35,10 @@ if __name__ == '__main__':
         have_git = shutil.which('git') is not None
 
         if is_git and have_git:
-            git_cmd = subprocess.run(['git', '--git-dir=' + git_dir, 'describe', 'HEAD'], stdout=subprocess.PIPE)
+            git_cmd = subprocess.run(
+                ['git', f'--git-dir={git_dir}', 'describe', 'HEAD'],
+                stdout=subprocess.PIPE,
+            )
             if git_cmd.returncode:
                 print('ERROR: Could not extract package version via `git describe` in', srcroot, file=sys.stderr)
                 sys.exit(-1)
@@ -55,7 +58,6 @@ if __name__ == '__main__':
         print(package_version)
         sys.exit(0)
 
-    # libtool version + darwin version
     elif args.libtool_version or args.darwin_version:
         opus_lt_cur = None
         opus_lt_rev = None
@@ -75,9 +77,9 @@ if __name__ == '__main__':
             opus_lt_rev = int(opus_lt_rev)
             opus_lt_age = int(opus_lt_age)
             if args.libtool_version:
-              print('{}.{}.{}'.format(opus_lt_cur - opus_lt_age, opus_lt_age, opus_lt_rev))
+                print(f'{opus_lt_cur - opus_lt_age}.{opus_lt_age}.{opus_lt_rev}')
             elif args.darwin_version:
-              print('{}.{}.{}'.format(opus_lt_cur + 1, 0, 0))
+                print(f'{opus_lt_cur + 1}.0.0')
             sys.exit(0)
         else:
             print('ERROR: Could not extract libtool version from configure.ac file in', srcroot, file=sys.stderr)

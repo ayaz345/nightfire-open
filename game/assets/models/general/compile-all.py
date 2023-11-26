@@ -34,7 +34,9 @@ class FileProcessor():
 		self.args = args
 		self.inputQc = inputQc
 		self.inputQcDir = os.path.dirname(self.inputQc)
-		self.inputModelName = os.path.splitext(os.path.basename(self.inputQc))[0] + ".mdl"
+		self.inputModelName = (
+			f"{os.path.splitext(os.path.basename(self.inputQc))[0]}.mdl"
+		)
 
 		# For eventual copying:
 		self.srcMdlPath = os.path.join(self.inputQcDir, self.inputModelName)
@@ -76,7 +78,7 @@ class FileProcessor():
 
 		texturePath = os.path.relpath(TEXTURE_DIR, self.inputQcDir).replace("\\", "/")
 		modifiedLines = \
-		[
+			[
 			f'$cdtexture "{texturePath}"',
 			'$cd "."'
 		]
@@ -111,9 +113,9 @@ class FileProcessor():
 
 					line = f'$modelname "{self.inputModelName}"'
 					modelNameReplaced = True
-			elif len(segments) > 0 and (segments[0] == "$cd" or segments[0] == "$cdtexture"):
-					# We set these manually, so kill off any others.
-					line = None
+			elif len(segments) > 0 and segments[0] in ["$cd", "$cdtexture"]:
+				# We set these manually, so kill off any others.
+				line = None
 
 			if line is not None:
 				modifiedLines.append(line)
@@ -187,7 +189,7 @@ class FileProcessor():
 		self.logMsg("*** Command complete.")
 
 	def prepareLog(self, name:str):
-		self.currentLog = os.path.join(self.inputQcDir, name + ".log")
+		self.currentLog = os.path.join(self.inputQcDir, f"{name}.log")
 
 		# Overwrite.
 		with open(self.currentLog, "w"):
@@ -293,7 +295,7 @@ def main():
 	print("Found", len(filesToProcess), "input files")
 
 	filesMap = {filePath: f"{filePath} has not yet been processed." for filePath in filesToProcess}
-	threadWork = [(args, filesMap, filePath) for filePath in filesMap.keys()]
+	threadWork = [(args, filesMap, filePath) for filePath in filesMap]
 
 	print("Starting thread pool with", args.threads, "threads")
 

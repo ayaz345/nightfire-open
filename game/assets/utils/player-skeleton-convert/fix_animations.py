@@ -52,10 +52,7 @@ def __fixThumbBone(entryAsList, isLeft):
 	# position in the Nightfire reference skeleton, because I CBA to
 	# do anything more complicated.
 
-	if isLeft:
-		entryAsList[4] += -1.54727
-	else:
-		entryAsList[4] += 1.626523
+	entryAsList[4] += -1.54727 if isLeft else 1.626523
 
 def __modifySkeletonFrame(frame, boneRenumberMap, thumbIndices):
 	bones = frame["bones"]
@@ -127,7 +124,9 @@ def main():
 	(boneList, skeleton) = __parseReference(args.ref)
 
 	allowedBoneNames = [bone.name() for bone in boneList.list()]
-	print("Allowed bones:\n", "\n".join(["  " + item for item in allowedBoneNames]))
+	print(
+		"Allowed bones:\n", "\n".join([f"  {item}" for item in allowedBoneNames])
+	)
 
 	for smdPath in args.smd:
 		__modifySmdByPath(allowedBoneNames, skeleton, smdPath)
