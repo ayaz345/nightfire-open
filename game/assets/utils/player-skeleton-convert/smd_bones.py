@@ -66,7 +66,7 @@ class SMDBone():
 		raise ValueError("Child to remove was not a child of this bone.")
 
 	def children(self):
-		return [child for child in self.__children]
+		return list(self.__children)
 
 class SMDBoneList():
 	def __init__(self, boneList):
@@ -85,11 +85,7 @@ class SMDBoneList():
 		self.__list = newList
 
 	def getByName(self, name):
-		for bone in self.__list:
-			if bone.name() == name:
-				return bone
-
-		return None
+		return next((bone for bone in self.__list if bone.name() == name), None)
 
 	def renumber(self):
 		renumberMap = {}

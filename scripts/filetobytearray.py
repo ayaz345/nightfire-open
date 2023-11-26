@@ -171,7 +171,7 @@ def main():
 		headerData = createCppHeaderFile(fileContent, args.name)
 		sourceData = createCppSourcefile(fileContent, args.name, headerName)
 
-	headerName = args.output + ".h"
+	headerName = f"{args.output}.h"
 
 	print("Writing header:", headerName)
 	with open(headerName, "w") as outFile:

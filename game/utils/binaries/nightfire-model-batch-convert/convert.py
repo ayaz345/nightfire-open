@@ -50,7 +50,7 @@ class FileProcessor:
 		inputQcTidyRelDirName = os.path.dirname(inputQcRelPath)
 		inputQcName = os.path.basename(inputQcRelPath)
 		inputMdlNameNoExt = os.path.splitext(inputQcName)[0]
-		inputMdlName = inputMdlNameNoExt + ".mdl"
+		inputMdlName = f"{inputMdlNameNoExt}.mdl"
 
 		# Ford/Ulti's batch decompiler puts decompiled files within subdirectories named
 		# after the model. We don't want to duplicate this in the scratch directory.
@@ -164,7 +164,7 @@ class FileProcessor:
 						self.logMsg("Found SMD:", smdPath, file="FindReferenceSmds")
 						referencedSmds.append(smdPath)
 
-		if len(referencedSmds) < 1:
+		if not referencedSmds:
 			raise RuntimeError(f"No bodygroups found in {relPath(qcPath)}")
 
 		return referencedSmds
@@ -213,7 +213,7 @@ class FileProcessor:
 				continue
 
 			textureName = line
-			pngName = segments[0].lower() + ".png"
+			pngName = f"{segments[0].lower()}.png"
 
 			if pngName not in TextureLookup:
 				raise RuntimeError(f"{relPath(smdPath)} contains unknown texture {textureName}")
@@ -234,7 +234,9 @@ class FileProcessor:
 			os.makedirs(outputDir, exist_ok=True)
 
 		for texture in textures:
-			textureFileNameOnDisk = TextureLookup[os.path.splitext(texture)[0].lower() + ".png"]
+			textureFileNameOnDisk = TextureLookup[
+				f"{os.path.splitext(texture)[0].lower()}.png"
+			]
 
 			inputPath = os.path.join(inputDir, textureFileNameOnDisk)
 			outputPath = os.path.join(outputDir, textureFileNameOnDisk)
@@ -277,7 +279,7 @@ class FileProcessor:
 		self.logMsg("*** Running command:", *args, file=(output if output else None))
 
 		if output:
-			outFilePath = os.path.join(self.fileScratchDir, output + ".log")
+			outFilePath = os.path.join(self.fileScratchDir, f"{output}.log")
 			with open(outFilePath, "a+") as stdOut:
 				result = subprocess.run(args, shell=True, stdout=stdOut)
 		else:
@@ -290,7 +292,7 @@ class FileProcessor:
 
 	def logMsg(self, *args, file=None):
 		if isinstance(file, str):
-			with open(os.path.join(self.fileScratchDir, file + ".log"), "a+") as outFile:
+			with open(os.path.join(self.fileScratchDir, f"{file}.log"), "a+") as outFile:
 				print(*args, file=outFile)
 		elif file is not None:
 			print(*args, file=file)
@@ -419,7 +421,7 @@ def main():
 	print("Found", len(filesToProcess), "input files")
 
 	filesMap = {filePath: f"{filePath} has not yet been processed." for filePath in filesToProcess}
-	threadWork = [(args, filesMap, filePath) for filePath in filesMap.keys()]
+	threadWork = [(args, filesMap, filePath) for filePath in filesMap]
 
 	print("Starting thread pool with", args.threads, "threads")
 

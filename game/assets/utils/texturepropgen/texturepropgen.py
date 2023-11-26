@@ -39,7 +39,10 @@ def createPropertiesInDirectory(directory, surfacePropName):
 		if os.path.isdir(fullPath):
 			createPropertiesInDirectory(fullPath, surfacePropName)
 		elif os.path.isfile(fullPath) and os.path.splitext(item)[1].lower() == ".png":
-			createPropertiesFile(os.path.join(directory, os.path.splitext(item)[0] + ".props"), surfacePropName)
+			createPropertiesFile(
+				os.path.join(directory, f"{os.path.splitext(item)[0]}.props"),
+				surfacePropName,
+			)
 
 def recordEncounteredSurfaceProp(path):
 	global encounteredProps
@@ -68,7 +71,7 @@ def inspect(directory, shouldVerify, shouldList):
 			inspect(fullPath, shouldVerify, shouldList)
 		elif os.path.isfile(fullPath):
 			if shouldVerify and os.path.splitext(item)[1].lower() == ".png":
-				targetPath = os.path.join(directory, os.path.splitext(item)[0] + ".props")
+				targetPath = os.path.join(directory, f"{os.path.splitext(item)[0]}.props")
 
 				if not os.path.isfile(targetPath):
 					print("File", fullPath, "has no corresponding properties file.")
@@ -101,9 +104,7 @@ def main():
 	if args.list:
 		print("Encountered surfaceprops:")
 
-		encountered = [key for key in encounteredProps]
-		encountered.sort()
-
+		encountered = sorted(encounteredProps)
 		for key in encountered:
 			print(f"  {key}: {encounteredProps[key]}")
 

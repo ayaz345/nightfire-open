@@ -110,7 +110,7 @@ class SMDReader():
 						raise ValueError(f"Expected frames up to a max of {maxFrame}, but got frame with number {frameNumber}.")
 
 					item = \
-					{
+						{
 						"number": frameNumber,
 						"bones": []
 					}
@@ -121,12 +121,8 @@ class SMDReader():
 						raise ValueError(f"Expected 7 tokens for bone position, but got {len(tokens)}.")
 
 					for index in range(0, len(tokens)):
-						if index == 0:
-							tokens[index] = int(tokens[index])
-						else:
-							tokens[index] = float(tokens[index])
-
-					item = skeletonFrames[len(skeletonFrames) - 1]
+						tokens[index] = int(tokens[index]) if index == 0 else float(tokens[index])
+					item = skeletonFrames[-1]
 					item["bones"].append(tuple(tokens))
 			except ValueError as ex:
 				raise ValueError(f"File {self.__fileName}, line: {line[0]}: {str(ex)}")

@@ -97,7 +97,7 @@ def __reparentLegs(bones):
 	pelvisBone = bones.getByName("Bip01 Pelvis")
 
 	if pelvisBone is None:
-		raise ValueError(f"Could not find bone: 'Bip01 Pelvis'.")
+		raise ValueError("Could not find bone: 'Bip01 Pelvis'.")
 
 	for index in range(0, 2):
 		side = "L" if index == 0 else "R"
@@ -153,7 +153,7 @@ def __createPlayerMeshBone(bones):
 
 	pelvis = bones.getByName("Bip01 Pelvis")
 	if pelvis is None:
-		raise ValueError(f"Could not find bone 'Bip01 Pelvis'.")
+		raise ValueError("Could not find bone 'Bip01 Pelvis'.")
 
 	bones.list().append(SMDBone(len(bones.list()), "Player_Mesh", pelvis))
 
@@ -162,7 +162,7 @@ def __createFootstepsBone(bones):
 
 	root = bones.getByName("Bip01")
 	if root is None:
-		raise ValueError(f"Could not find bone 'Bip01'.")
+		raise ValueError("Could not find bone 'Bip01'.")
 
 	# Just append - re-ordering will occur later.
 	bones.list().append(SMDBone(len(bones.list()), "Bip01 Footsteps", root))
@@ -173,7 +173,7 @@ def __createPlayerMeshSkeletonEntry(bones, skeleton):
 
 	bone = bones.getByName("Player_Mesh")
 	if bone is None:
-		raise ValueError(f"Could not find bone 'Player_Mesh'.")
+		raise ValueError("Could not find bone 'Player_Mesh'.")
 
 	# Gonna assume that the HLDM position is fine for Nightfire models too.
 	# The model proportions seem to be the same anyway.
@@ -184,7 +184,7 @@ def __createFootstepsSkeletonEntry(bones, skeleton):
 
 	bone = bones.getByName("Bip01 Footsteps")
 	if bone is None:
-		raise ValueError(f"Could not find bone 'Bip01 Footsteps'.")
+		raise ValueError("Could not find bone 'Bip01 Footsteps'.")
 
 	# Gonna assume that the HLDM position is fine for Nightfire models too.
 	# The model proportions seem to be the same anyway.
@@ -351,7 +351,7 @@ def main():
 	if args.output is None:
 		outDir = os.path.dirname(refSmd)
 		fileWithExt = os.path.splitext(os.path.basename(refSmd))
-		args.output = os.path.join(outDir, fileWithExt[0] + "_new" + fileWithExt[1])
+		args.output = os.path.join(outDir, f"{fileWithExt[0]}_new{fileWithExt[1]}")
 
 	print("Converting", refSmd, "to", args.output)
 	(bones, skeleton, triangles) = __readSmd(refSmd)

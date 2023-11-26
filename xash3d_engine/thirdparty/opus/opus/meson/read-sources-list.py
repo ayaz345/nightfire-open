@@ -8,7 +8,7 @@
 import sys
 
 if len(sys.argv) < 2:
-  sys.exit('Usage: {} sources_foo.mk [sources_bar.mk...]'.format(sys.argv[0]))
+  sys.exit(f'Usage: {sys.argv[0]} sources_foo.mk [sources_bar.mk...]')
 
 for input_fn in sys.argv[1:]:
   with open(input_fn, 'r', encoding='utf8') as f:
@@ -22,7 +22,7 @@ for input_fn in sys.argv[1:]:
     for line in lines:
       values = line.strip().split('=', maxsplit=2)
       if len(values) != 2:
-        raise RuntimeError('Unable to parse line "{}" from file "{}"'.format(line, input_fn))
+        raise RuntimeError(f'Unable to parse line "{line}" from file "{input_fn}"')
       var, files = values
       sources_list = [f for f in files.split(' ') if f]
       print(var.strip(), '=', ' '.join(sources_list))

@@ -47,7 +47,7 @@ def process_file(name):
 
 	# TODO: dumb! It can't find multilines
 	with open(name, "r") as f:
-		for line in f.readlines():
+		for line in f:
 			trans += re.findall(TRANSLATABLE_PATTERN, line)
 
 	return trans
@@ -62,12 +62,7 @@ def process_trans(trans):
 	# #1: extract string literals from L(" ") and combine them into one
 	trans = [extract_string_literal(t) for t in trans]
 
-	# #2: filter unique
-	trans = list(set(trans))
-
-	# #4: sort :)
-	trans.sort()
-
+	trans = sorted(set(trans))
 	return trans
 
 def vgui_translation_parse(name):
@@ -91,7 +86,7 @@ def vgui_translation_parse(name):
 
 				continue
 
-			if parsing and is_trans:
+			if is_trans:
 				trans += [strip_quotes(t)]
 
 			is_trans = not is_trans
@@ -110,7 +105,7 @@ def create_translations_file(name, trans):
 			f.write('"%s"%*s""\n' % (t, length, ' '))
 		f.write(FOOTER)
 
-		print('Created skeleton translation file at %s' % name)
+		print(f'Created skeleton translation file at {name}')
 
 def main():
 	files = [ os.path.join(folder, name)
@@ -145,7 +140,7 @@ def main():
 			avail_trans += vgui_translation_parse(os.path.join('nonfree_translations', i))
 
 		print('%d translated strings available from original GameUI/HL translations' % len(avail_trans))
-		trans = [t for t in trans if not t in avail_trans]
+		trans = [t for t in trans if t not in avail_trans]
 		print('%d strings needs to be translated(WITH strings.lst compaitibility and WITH non-free translations)' % len(trans))
 		create_translations_file(os.path.join('translations', 'mainui_skeleton_stripped.txt'), trans)
 	else:

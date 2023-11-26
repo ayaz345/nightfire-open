@@ -18,11 +18,7 @@ def __writeSkeletonFrameBones(outFile, frame):
 		outString = __indent(index)
 
 		for index in range(0, len(bone)):
-			if index == 0:
-				outString += str(bone[index])
-			else:
-				outString += " {0:.6f}".format(bone[index])
-
+			outString += str(bone[index]) if index == 0 else " {0:.6f}".format(bone[index])
 		__writeLine(outFile, outString)
 
 def __writeFullSkeleton(outFile, skeleton):
